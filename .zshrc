@@ -32,3 +32,5 @@ alias nz="nvim $ZDOTDIR/.zshrc"
 # git
 alias gs="git status"
 alias ga="git add"
+
+source $ZDOTDIR/.config/zsh/base.zsh
