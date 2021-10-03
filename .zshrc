@@ -34,3 +34,4 @@ alias gs="git status"
 alias ga="git add"
 
 source $ZDOTDIR/.config/zsh/base.zsh
+source $ZDOTDIR/.config/zsh/fzf.zsh
