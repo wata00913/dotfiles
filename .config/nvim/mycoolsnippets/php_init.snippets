@@ -1,0 +1,34 @@
+priority 10
+
+
+snippet php "tag br"
+<?php
+
+?>
+endsnippet
+
+snippet ph "php tag line"
+<?php ?>
+endsnippet
+
+snippet th "this object"
+$this->
+endsnippet
+
+snippet kv "'key' => value"
+'$1' => ${2}
+endsnippet
+
+snippet kv, "'key' => value comma"
+'${1}' => ${2},
+${3}
+endsnippet
+
+snippet ad "$data['key']"
+\$${1:name}['${2}']${0}
+endsnippet
+
+#二次元配列では補完できない
+snippet nk "array next"
+['${1}']${0}
+endsnippet

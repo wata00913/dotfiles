@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/sakamotoryuuji/.config/nvim/plugins'
+let g:netrw_dirhist_2='/Users/sakamotoryuuji/.config/nvim/UltiSnips'
+let g:netrw_dirhist_3='/Users/sakamotoryuuji/.config/nvim'
+let g:netrw_dirhist_4='/Users/sakamotoryuuji/.config/nvim/rplugin'
+let g:netrw_dirhist_5='/Users/sakamotoryuuji/.config/nvim/plugins'
+let g:netrw_dirhist_6='/home/sakamoto/.config/nvim/rplugin/python3/__pycache__'
+let g:netrw_dirhist_7='/home/sakamoto/.config/nvim/rplugin/python3/test/__pycache__'

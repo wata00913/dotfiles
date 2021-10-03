@@ -1,0 +1,252 @@
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo='Shougo/deoplete.nvim'
+depends = 'context_filetype.vim'
+if = "has('nvim')"
+    on_event = 'InsertEnter'
+    hook_source = '''
+        let g:deoplete#enable_at_startup = 1
+
+	call deoplete#custom#source('buffer',
+	\ 'min_pattern_length', 1)
+
+        inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ deoplete#mappings#manual_complete()
+		function! s:check_back_space() abort "{{{
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1]  =~ '\s'
+		endfunction"}}}
+        inoremap <expr><CR> pumvisible() ?
+        \ deoplete#close_popup() : "<CR>"
+
+
+    '''
+
+[[plugins]]
+repo='deoplete-plugins/deoplete-zsh'
+depends = 'deoplete.nvim'
+on_ft = 'zsh'
+on_event='InsertEnter'
+
+#html
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_ft = ['css', 'html', 'xhtml', 'php']
+hook_source = '''
+    let g:user_emmet_mode = 'nv'
+    let g:user_emmet_settings = {
+        \ 'variables': {
+        \ 'lang' : 'ja'
+        \}
+        \}
+'''
+
+#lsp
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+rev = 'next'
+build = 'bash install.sh'
+on_ft = ['php', 'python', 'ruby', 'css', 'javascript', 'sql', 'java']
+hook_add= '''
+    set hidden
+    let g:LanguageClient_autoStart = 1
+    function! s:lsp()
+        if has_key(g:LanguageClient_serverCommands, &filetype)
+            nnoremap <buffer><silent> <Space>l[ :call LanguageClient#textDocument_definition()<CR>
+            nnoremap <buffer><silent> <Space>l] :call LanguageClient#textDocument_references()<CR>
+            nnoremap <buffer><silent> <Space>lr :call LanguageClient#textDocument_rename()<CR>
+            nnoremap <buffer><silent> <Space>ld :call LanguageClient#textDocument_documentSymbol()<CR>
+            nnoremap <buffer><silent> <Space>lh :call LanguageClient#textDocument_documentHighlight()<CR>
+            nnoremap <buffer><silent> <Space>lH :call LanguageClient#clearDocumentHighlight()<CR>
+            nnoremap <buffer><silent> <Space>lf :call LanguageClient#textDocument_formatting()<CR>
+            nnoremap <buffer><silent> <Space>lF :call LanguageClient#textDocument_rangeFormatting()<CR>
+        endif
+    endfunction
+        
+    augroup my-lsp
+        autocmd!
+        autocmd FileType * call s:lsp()
+    augroup END
+    if has('mac')
+        let s:conf_os = '/config_mac'
+    elseif has('unix')
+        let s:conf_os = '/config_linux'
+    endif
+    let g:LanguageClient_serverCommands = {
+        \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+        \ 'php': ['intelephense', '--stdio'], 
+        \ 'python': ['pyls'],
+        \ 'ruby': ['solargraph', 'stdio'],
+        \ 'javascript': ['javascript-typescript-stdio'],
+        \ 'css': ['css-language-server', '--stdio'],
+        \ 'sql': ['sql-language-server', 'up', '--method', 'stdio'],
+        \ 'java':['java', 
+                \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+                \ '-Dosgi.bundles.defaultStartLevel=4',
+                \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
+                \ '-Dlog.level=ALL',
+                \ '-noverify',
+                \ '-Dfile.encoding=UTF-8',
+                \ '-Xmx1G',
+                \ '-jar',
+                \ expand('~/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'),
+                \ '-configuration',
+                \ expand('~/lsp/eclipse.jdt.ls' . s:conf_os),
+                \ '-data',
+                \ getcwd()
+                \]
+        \ }
+'''
+
+[[plugins]]
+repo = 'gregsexton/MatchTag'
+on_ft = ['html', 'xhtml', 'php']
+
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+hook_add = '''
+    nnoremap <silent> <Space>ig :<C-u>IndentGuidesToggle<CR>
+'''
+hook_source='''
+    let g:indent_guides_enable_on_vim_startup = 1
+    let g:indent_guides_exclude_filetypes = [
+    \ 'nerdtree',
+    \ 'help',
+    \ ]
+'''
+
+[[plugins]]
+repo = 'SirVer/ultisnips'
+on_event = 'InsertEnter'
+hook_add = '''
+       let g:UltiSnipsExpandTrigger = "<C-t>" 
+       let g:UltiSnipsJumpForwardTrigger = "<C-j>"
+       let g:UltiSnipsJumpBackwardTrigger= "<C-k>"
+       let s:mysnippetsDir = expand(g:conf_dir . '/mycoolsnippets')
+       let g:UltiSnipsSnippetDirectories=[s:mysnippetsDir, 'UltiSnips']
+       execute 'set runtimepath+=' . s:mysnippetsDir
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+if = "has('nvim')"
+hook_source = '''
+  "nerdtreeは範囲指定の数字不要なのでC-u不要
+  nnoremap <silent> [nerd]o :NERDTree<CR>
+'''
+
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+if = "has('nvim')"
+hook_source='''
+    autocmd FileType denite call s:denite_my_settings()
+    function! s:denite_my_settings() abort
+        nnoremap <silent><buffer><expr> <CR>
+        \ denite#do_map('do_action')
+        nnoremap <silent><buffer><expr> v
+        \ denite#do_map('do_action', 'vsplit')
+        nnoremap <silent><buffer><expr> s
+        \ denite#do_map('do_action', 'split')
+        nnoremap <silent><buffer><expr> d
+        \ denite#do_map('do_action', 'delete')
+        nnoremap <silent><buffer><expr> p
+        \ denite#do_map('do_action', 'preview')
+        nnoremap <silent><buffer><expr> q
+        \ denite#do_map('quit')
+        nnoremap <silent><buffer><expr> i
+        \ denite#do_map('open_filter_buffer')
+        nnoremap <silent><buffer><expr> <Space>
+        \ denite#do_map('toggle_select').'j'
+	  endfunction
+    autocmd FileType denite call denite_settings#my_settings()
+    command! -nargs=0 DeniteVisualGrep call denite_settings#denite_visual_grep()
+'''
+
+hook_add='''
+    nnoremap <silent> [denite]g :<C-u>Denite grep -buffer-name=search-buffer-denite<CR>
+    nnoremap <silent> [denite]w :<C-u>DeniteCursorWord grep  -buffer-name=search-buffer-denite<CR>
+    nnoremap <silent> [denite]r :<C-u>Denite -resume -buffer-name=search-buffer-denite<CR>
+    nnoremap <silent> [denite]n :<C-u>Denite -resume -buffer-name=search-buffer-denite -cursor-pos=+1 -immediately<CR>
+    nnoremap <silent> [denite]p :<C-u>Denite -resume -buffer-name=search-buffer-denite -cursor-pos=-1 -immediately<CR>
+    nnoremap <silent> [denite]f :<C-u>Denite file/rec -start-filter -buffer-name=search-file-denite<CR>
+    nnoremap <silent> [denite]F :<C-u>Denite file/rec -buffer-name=search-file-denite<CR>
+    nnoremap <silent> [denite]e :<C-u>Denite -resume -buffer-name=search-file-denite -start-filter<CR>
+    nnoremap <silent> [denite]p :<C-u>DeniteProjectDir file/rec -start-filter<CR>
+    nnoremap <silent> [denite]b :<C-u>Denite buffer -start-filter<CR>
+    nnoremap <silent> [denite]c :<C-u>Denite command_history -start-filter<CR>
+    vnoremap <silent> [denite_v]g :<C-u>DeniteVisualGrep<CR>
+'''
+
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+hook_source='''
+    autocmd FileType defx call defx_settings#my_settings()
+'''
+
+[[plugins]]
+repo = 'godlygeek/tabular'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['markdown']
+hook_source = '''
+    nnoremap <silent> <Space>mtt :TableFormat<CR>
+'''
+
+[[plugins]]
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown']
+build = 'cd app & yarn install'
+hook_source = '''
+    nnoremap [markdownpreview]s :MarkdownPreview<CR>
+    nnoremap [markdownpreview]q :MarkdownPreviewStop<CR>
+'''
+#formatter
+[[plugins]]
+repo = 'prettier/vim-prettier'
+build = 'yarn install'
+on_ft = ['php', 'python']
+
+#interactive scratchpad
+[[plugins]]
+repo = 'metakirby5/codi.vim'
+on_ft = ['php', 'javascript', 'python']
+hook_add = '''
+    function! s:Codi() abort
+        let ft_to_ext = {
+            \ 'python'     : 'py',
+            \ 'javascript' : 'js',
+            \ 'php'        : 'php'
+        \ }
+        execute 'edit $HOME/.codi.' . ft_to_ext[&filetype]
+        execute 'Codi'
+    endfunction
+
+    command! -nargs=? NewCodi call s:Codi(<f-args>) 
+    nnoremap <silent> <Space>cdn :NewCodi<CR>
+'''
+
+hook_source = '''
+    function! s:codi() abort
+        nnoremap <buffer><silent> <Space>cdi :Codi<CR>
+        nnoremap <buffer><silent> <Space>cdt :Codi!!<CR>
+    endfunction
+    augroup my_codi
+        autocmd!
+        autocmd FileType python,javascript,php call s:codi()
+    augroup END
+'''
+
+[[plugins]]
+repo = 'Shougo/deol.nvim'
+if = "has('nvim')"
+hook_add = '''
+    tnoremap <silent> <C-[> <C-\><C-n>
+    nnoremap <silent> <C-m>s :Deol -edit -split=horizontally<CR>
+    nnoremap <silent> <C-m>v :Deol -edit -split=vertically<CR>
+'''
