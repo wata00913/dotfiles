@@ -1,0 +1,22 @@
+priority 1
+
+snippet class "class"
+class ${1:class_name}
+  ${2}
+end
+endsnippet
+
+snippet class_init "class and init"
+class ${1:class_name}
+  def initialize(${2:arg})
+      ${3}
+  end
+  ${4}
+end
+endsnippet
+
+snippet init "init"
+def initialize(${1:arg})
+  ${2}
+end
+endsnippet
