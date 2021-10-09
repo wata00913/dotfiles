@@ -32,6 +32,21 @@ depends = 'deoplete.nvim'
 on_ft = 'zsh'
 on_event='InsertEnter'
 
+[[plugins]]
+repo = 'phaazon/hop.nvim'
+hook_source = '''
+lua << EOF
+require'hop'.setup()
+EOF
+'''
+#hook_sourceでキーマップが定義できないのでhook_addで定義
+hook_add='''
+nnoremap <buffer><silent> <Space>kk :HopWord<CR>
+nnoremap <buffer><silent> <Space>kp :HopPattern<CR>
+nnoremap <buffer><silent> <Space>kc :HopChar1<CR>
+nnoremap <buffer><silent> <Space>kl :HopLine<CR>
+'''
+
 #html
 [[plugins]]
 repo = 'mattn/emmet-vim'
