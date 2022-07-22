@@ -27,6 +27,21 @@ if = "has('nvim')"
     '''
 
 [[plugins]]
+repo = 'junegunn/fzf.vim'
+hook_source = '''
+let g:fzf_command_prefix = 'Fzf'
+
+function! s:fzfgrep(query)
+nnoremap <buffer><silent> <Space>uf :FzfFiles<CR>
+nnoremap <buffer><silent> <Space>ub :FzfBuffers<CR>
+nnoremap <buffer><silent> <Space>ug :FzfRg<CR>
+nnoremap <buffer><silent> <Space>ul :FzfLines<CR>
+nnoremap <buffer><silent> <Space>uw :FzfLines<CR>
+nnoremap <buffer><silent> <Space>uh :Fzf:History:<CR>
+nnoremap <buffer><silent> <Space>us :Fzf:History/<CR>
+'''
+
+[[plugins]]
 repo='deoplete-plugins/deoplete-zsh'
 depends = 'deoplete.nvim'
 on_ft = 'zsh'
@@ -46,6 +61,7 @@ nnoremap <buffer><silent> <Space>kp :HopPattern<CR>
 nnoremap <buffer><silent> <Space>kc :HopChar1<CR>
 nnoremap <buffer><silent> <Space>kl :HopLine<CR>
 '''
+
 
 #html
 [[plugins]]
