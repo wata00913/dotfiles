@@ -25,6 +25,11 @@ noremap <C-j> 10j
 noremap <C-k> 10k
 nnoremap ; :
 nnoremap : ;
+" arrow
+nnoremap <Up>   <C-w>k 
+nnoremap <Right> <C-w>l 
+nnoremap <Left> <C-w>h 
+nnoremap <Down> <C-w>j 
 
 "insert to normal
 inoremap <silent> jj <ESC>:<C-u>w<CR>
