@@ -28,17 +28,21 @@ if = "has('nvim')"
 
 [[plugins]]
 repo = 'junegunn/fzf.vim'
-hook_source = '''
-let g:fzf_command_prefix = 'Fzf'
+hook_add = '''
+function! s:fzf_by_query(type) abort
+    let s:query = input('>')
 
-function! s:fzfgrep(query)
-nnoremap <buffer><silent> <Space>uf :FzfFiles<CR>
-nnoremap <buffer><silent> <Space>ub :FzfBuffers<CR>
-nnoremap <buffer><silent> <Space>ug :FzfRg<CR>
-nnoremap <buffer><silent> <Space>ul :FzfLines<CR>
-nnoremap <buffer><silent> <Space>uw :FzfLines<CR>
-nnoremap <buffer><silent> <Space>uh :Fzf:History:<CR>
-nnoremap <buffer><silent> <Space>us :Fzf:History/<CR>
+    let s:commands = {'grep': 'Rg', 'lines': 'Lines'}
+    let s:selected = s:commands[a:type]
+    execute(join([s:selected, s:query], ' '))
+endfunction
+nnoremap <silent> <Space>uf :Files<CR>
+nnoremap <silent> <Space>ub :Buffers<CR>
+nnoremap <silent> <Space>ul :call <SID>fzf_by_query('lines')<CR>
+nnoremap <silent> <Space>uw :Windows<CR>
+nnoremap <silent> <Space>uh :History:<CR>
+nnoremap <silent> <Space>u/ :History/<CR>
+nnoremap <silent> <Space>ug :call <SID>fzf_by_query('grep')<CR>
 '''
 
 [[plugins]]

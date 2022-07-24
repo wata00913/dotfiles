@@ -17,10 +17,10 @@ repo='nvim-lua/plenary.nvim'
 repo='nvim-telescope/telescope.nvim'
 depends='nvim-lua/plenary.nvim'
 hook_add = '''
-nnoremap <silent> <Space>uf <cmd>Telescope find_files<CR>
-nnoremap <silent> <Space>ug <cmd>Telescope grep_string<CR>
-nnoremap <silent> <Space>ul <cmd>Telescope live_grep<CR>
-nnoremap <silent> <Space>ub <cmd>Telescope buffer<CR>
+nnoremap <silent> <Space>tf <cmd>Telescope find_files<CR>
+nnoremap <silent> <Space>tg <cmd>Telescope grep_string<CR>
+nnoremap <silent> <Space>tl <cmd>Telescope live_grep<CR>
+nnoremap <silent> <Space>tb <cmd>Telescope buffer<CR>
 '''
 
 [[plugins]]
