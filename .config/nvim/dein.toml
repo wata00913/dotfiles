@@ -9,6 +9,9 @@ hook_add = '''
 [[plugins]]
 repo = 'challenger-deep-theme/vim'
 
+[[plugins]]
+repo = 'doums/darcula'
+
 #deinalay.tomlで設定するとplenaryがnot found(checkhealth)で読み込まれない
 [[plugins]]
 repo='nvim-lua/plenary.nvim'
