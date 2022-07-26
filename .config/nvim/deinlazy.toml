@@ -29,19 +29,20 @@ if = "has('nvim')"
 [[plugins]]
 repo = 'junegunn/fzf.vim'
 hook_add = '''
+let g:fzf_command_prefix = 'Fzf'
 function! s:fzf_by_query(type) abort
-    let s:query = input('>')
+    let s:query = input('Pattern>')
 
-    let s:commands = {'grep': 'Rg', 'lines': 'Lines'}
+    let s:commands = {'grep': g:fzf_command_prefix . 'Rg', 'lines': g:fzf_command_prefix . 'Lines'}
     let s:selected = s:commands[a:type]
     execute(join([s:selected, s:query], ' '))
 endfunction
-nnoremap <silent> <Space>uf :Files<CR>
-nnoremap <silent> <Space>ub :Buffers<CR>
+nnoremap <silent> <Space>uf :FzfFiles<CR>
+nnoremap <silent> <Space>ub :FzfBuffers<CR>
 nnoremap <silent> <Space>ul :call <SID>fzf_by_query('lines')<CR>
-nnoremap <silent> <Space>uw :Windows<CR>
-nnoremap <silent> <Space>uh :History:<CR>
-nnoremap <silent> <Space>u/ :History/<CR>
+nnoremap <silent> <Space>uw :FzfWindows<CR>
+nnoremap <silent> <Space>uh :FzfHistory:<CR>
+nnoremap <silent> <Space>u/ :FzfHistory/<CR>
 nnoremap <silent> <Space>ug :call <SID>fzf_by_query('grep')<CR>
 '''
 
