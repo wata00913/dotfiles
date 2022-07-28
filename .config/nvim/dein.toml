@@ -12,6 +12,9 @@ repo = 'challenger-deep-theme/vim'
 [[plugins]]
 repo = 'doums/darcula'
 
+[[plugins]]
+repo = 'thinca/vim-qfreplace'
+
 #deinalay.tomlで設定するとplenaryがnot found(checkhealth)で読み込まれない
 [[plugins]]
 repo='nvim-lua/plenary.nvim'
