@@ -43,6 +43,8 @@ nnoremap <silent> <Space>ul :call <SID>fzf_by_query('lines')<CR>
 nnoremap <silent> <Space>uw :FzfWindows<CR>
 nnoremap <silent> <Space>uh :FzfHistory:<CR>
 nnoremap <silent> <Space>u/ :FzfHistory/<CR>
+nnoremap <silent> <Space>uc :FzfCommits<CR>
+nnoremap <silent> <Space>uv :FzfBCommits<CR>
 nnoremap <silent> <Space>ug :call <SID>fzf_by_query('grep')<CR>
 '''
 
