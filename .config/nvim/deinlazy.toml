@@ -30,12 +30,29 @@ if = "has('nvim')"
 repo = 'junegunn/fzf.vim'
 hook_add = '''
 let g:fzf_command_prefix = 'Fzf'
+
+function! s:build_quickfix_list(lines) abort
+    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+    copen
+    cc
+endfunction
+
+let g:fzf_action = {
+    \ 'ctrl-t': 'select-all',
+    \ 'ctrl-s': 'split',
+    \ 'ctrl-e': function('s:build_quickfix_list') }
+
 function! s:fzf_by_query(type) abort
     let s:query = input('Pattern>')
 
     let s:commands = {'grep': g:fzf_command_prefix . 'Rg', 'lines': g:fzf_command_prefix . 'Lines'}
     let s:selected = s:commands[a:type]
     execute(join([s:selected, s:query], ' '))
+endfunction
+
+function! s:fzf_ag_by_query() abort
+    let s:query = input('Pattern>')
+    call fzf#vim#ag(s:query, {'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all'})
 endfunction
 nnoremap <silent> <Space>uf :FzfFiles<CR>
 nnoremap <silent> <Space>ub :FzfBuffers<CR>
@@ -45,7 +62,7 @@ nnoremap <silent> <Space>uh :FzfHistory:<CR>
 nnoremap <silent> <Space>u/ :FzfHistory/<CR>
 nnoremap <silent> <Space>uc :FzfCommits<CR>
 nnoremap <silent> <Space>uv :FzfBCommits<CR>
-nnoremap <silent> <Space>ug :call <SID>fzf_by_query('grep')<CR>
+nnoremap <silent> <Space>ug :call <SID>fzf_ag_by_query()<CR>
 '''
 
 [[plugins]]
