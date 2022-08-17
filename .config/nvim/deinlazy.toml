@@ -45,7 +45,7 @@ let g:fzf_action = {
 function! s:fzf_by_query(type) abort
     let s:query = input('Pattern>')
 
-    let s:commands = {'grep': g:fzf_command_prefix . 'Rg', 'lines': g:fzf_command_prefix . 'Lines'}
+    let s:commands = {'lines': g:fzf_command_prefix . 'Lines'}
     let s:selected = s:commands[a:type]
     execute(join([s:selected, s:query], ' '))
 endfunction
