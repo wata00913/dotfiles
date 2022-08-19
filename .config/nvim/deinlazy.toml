@@ -37,10 +37,14 @@ function! s:build_quickfix_list(lines) abort
     cc
 endfunction
 
+" ctrl-lは1行を無名レジスタにヤンク
+" ctrl-yは複数行をクリップボードにヤンク
 let g:fzf_action = {
     \ 'ctrl-t': 'select-all',
     \ 'ctrl-s': 'split',
-    \ 'ctrl-e': function('s:build_quickfix_list') }
+    \ 'ctrl-e': function('s:build_quickfix_list'),
+    \ 'ctrl-l': {lines -> setreg("", substitute(lines[0], "\n", "", "g"))},
+    \ 'ctrl-y': {lines -> setreg('*', join(lines, "\n"))}}
 
 function! s:fzf_by_query(type) abort
     let s:query = input('Pattern>')
