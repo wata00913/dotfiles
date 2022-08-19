@@ -61,7 +61,7 @@ repo='lambdalisue/fern.vim'
 rev='main'
 hook_add='''
 let g:fern_disable_startup_warnings = 1
-nnoremap <buffer><silent> <Space>ff :Fern . -drawer<CR>
+nnoremap <silent> <Space>ff :Fern . -drawer<CR>
 '''
 
 [[plugins]]

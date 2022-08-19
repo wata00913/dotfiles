@@ -84,10 +84,10 @@ EOF
 '''
 #hook_sourceでキーマップが定義できないのでhook_addで定義
 hook_add='''
-nnoremap <buffer><silent> <Space>kk :HopWord<CR>
-nnoremap <buffer><silent> <Space>kp :HopPattern<CR>
-nnoremap <buffer><silent> <Space>kc :HopChar1<CR>
-nnoremap <buffer><silent> <Space>kl :HopLine<CR>
+nnoremap <silent> <Space>kk :HopWord<CR>
+nnoremap <silent> <Space>kp :HopPattern<CR>
+nnoremap <silent> <Space>kc :HopChar1<CR>
+nnoremap <silent> <Space>kl :HopLine<CR>
 '''
 
 
