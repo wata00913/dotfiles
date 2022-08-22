@@ -27,6 +27,49 @@ if = "has('nvim')"
     '''
 
 [[plugins]]
+repo = 'junegunn/fzf.vim'
+hook_add = '''
+let g:fzf_command_prefix = 'Fzf'
+
+function! s:build_quickfix_list(lines) abort
+    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+    copen
+    cc
+endfunction
+
+" ctrl-lは1行を無名レジスタにヤンク
+" ctrl-yは複数行をクリップボードにヤンク
+let g:fzf_action = {
+    \ 'ctrl-t': 'select-all',
+    \ 'ctrl-s': 'split',
+    \ 'ctrl-e': function('s:build_quickfix_list'),
+    \ 'ctrl-l': {lines -> setreg("", substitute(lines[0], "\n", "", "g"))},
+    \ 'ctrl-y': {lines -> setreg('*', join(lines, "\n"))}}
+
+function! s:fzf_by_query(type) abort
+    let s:query = input('Pattern>')
+
+    let s:commands = {'lines': g:fzf_command_prefix . 'Lines'}
+    let s:selected = s:commands[a:type]
+    execute(join([s:selected, s:query], ' '))
+endfunction
+
+function! s:fzf_ag_by_query() abort
+    let s:query = input('Pattern>')
+    call fzf#vim#ag(s:query, {'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all'})
+endfunction
+nnoremap <silent> <Space>uf :FzfFiles<CR>
+nnoremap <silent> <Space>ub :FzfBuffers<CR>
+nnoremap <silent> <Space>ul :call <SID>fzf_by_query('lines')<CR>
+nnoremap <silent> <Space>uw :FzfWindows<CR>
+nnoremap <silent> <Space>uh :FzfHistory:<CR>
+nnoremap <silent> <Space>u/ :FzfHistory/<CR>
+nnoremap <silent> <Space>uc :FzfCommits<CR>
+nnoremap <silent> <Space>uv :FzfBCommits<CR>
+nnoremap <silent> <Space>ug :call <SID>fzf_ag_by_query()<CR>
+'''
+
+[[plugins]]
 repo='deoplete-plugins/deoplete-zsh'
 depends = 'deoplete.nvim'
 on_ft = 'zsh'
@@ -41,11 +84,12 @@ EOF
 '''
 #hook_sourceでキーマップが定義できないのでhook_addで定義
 hook_add='''
-nnoremap <buffer><silent> <Space>kk :HopWord<CR>
-nnoremap <buffer><silent> <Space>kp :HopPattern<CR>
-nnoremap <buffer><silent> <Space>kc :HopChar1<CR>
-nnoremap <buffer><silent> <Space>kl :HopLine<CR>
+nnoremap <silent> <Space>kk :HopWord<CR>
+nnoremap <silent> <Space>kp :HopPattern<CR>
+nnoremap <silent> <Space>kc :HopChar1<CR>
+nnoremap <silent> <Space>kl :HopLine<CR>
 '''
+
 
 #html
 [[plugins]]
