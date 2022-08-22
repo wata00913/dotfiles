@@ -9,6 +9,7 @@ export PATH="$PYENV_ROOT/shims:$PATH"
 export PATH="$RUBY_ROOT/bin:$PATH"
 
 export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:/usr/local/bin"
 
 export XDG_CONFIG_HOME=$HOME/dotfiles/.config
 export XDG_CACHE_HOME=$HOME/.cache
@@ -30,6 +31,7 @@ alias sz="source $ZDOTDIR/.zshrc"
 alias nz="nvim $ZDOTDIR/.zshrc"
 
 # git
+export PATH="$PATH:/usr/local/share/git-core/contrib/diff-highlight"
 alias gs="git status"
 alias ga="git add"
 
