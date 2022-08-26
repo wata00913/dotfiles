@@ -69,6 +69,10 @@ nnoremap <silent> <Space>uv :FzfBCommits<CR>
 nnoremap <silent> <Space>ug :call <SID>fzf_ag_by_query()<CR>
 '''
 
+# メンテナンスされないためdenops-translate.vimへの移行が必要
+[[plugins]]
+repo = 'skanehira/translate.vim'
+
 [[plugins]]
 repo='deoplete-plugins/deoplete-zsh'
 depends = 'deoplete.nvim'
