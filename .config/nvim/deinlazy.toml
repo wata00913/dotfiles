@@ -37,6 +37,21 @@ function! s:build_quickfix_list(lines) abort
     cc
 endfunction
 
+function! s:to_lines(qflist) abort
+    return map(a:qflist, { _, val -> join(
+            \ [bufname(val['bufnr']), val['lnum'], val['text']],
+            \ ':')
+        \}
+    \)
+endfunction
+
+function! s:open_selected_line(line) abort
+    let parsed = split(a:line, ':')
+    let fname = parsed[0]
+    execute 'e ' . fname
+    call cursor(parsed[1], 1)
+endfunction
+
 " ctrl-lは1行を無名レジスタにヤンク
 " ctrl-yは複数行をクリップボードにヤンク
 let g:fzf_action = {
@@ -54,10 +69,22 @@ function! s:fzf_by_query(type) abort
     execute(join([s:selected, s:query], ' '))
 endfunction
 
-function! s:fzf_ag_by_query() abort
-    let s:query = input('Pattern>')
+function! s:fzf_git_diff() abort
+    execute 'GitGutterQuickFix'
+    call fzf#run(fzf#wrap({
+        \'source': s:to_lines(getqflist()),
+        \'sink': function('s:open_selected_line') }))
+endfunction
+
+function! s:fzf_ag_by_query(...) abort
+    if a:0 == 0
+        let s:query = input('Pattern>')
+    elseif a:0 == 1
+        let s:query = a:1
+    endif
     call fzf#vim#ag(s:query, {'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all'})
 endfunction
+
 nnoremap <silent> <Space>uf :FzfFiles<CR>
 nnoremap <silent> <Space>ub :FzfBuffers<CR>
 nnoremap <silent> <Space>ul :call <SID>fzf_by_query('lines')<CR>
@@ -67,6 +94,8 @@ nnoremap <silent> <Space>u/ :FzfHistory/<CR>
 nnoremap <silent> <Space>uc :FzfCommits<CR>
 nnoremap <silent> <Space>uv :FzfBCommits<CR>
 nnoremap <silent> <Space>ug :call <SID>fzf_ag_by_query()<CR>
+nnoremap <silent> <Space>ur :call <SID>fzf_ag_by_query(expand("<cword>"))<CR>
+nnoremap <silent> <Space>uu :call <SID>fzf_git_diff()<CR>
 '''
 
 # メンテナンスされないためdenops-translate.vimへの移行が必要

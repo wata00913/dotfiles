@@ -62,7 +62,17 @@ rev='main'
 hook_add='''
 let g:fern_disable_startup_warnings = 1
 nnoremap <silent> <Space>ff :Fern . -drawer<CR>
+  function! FernInit() abort
+    nmap <buffer> r <Plug>(fern-action-remove)
+  endfunction
+  augroup FernEvents
+    autocmd!
+    autocmd FileType fern call FernInit()
+  augroup END
 '''
+[[plugins]]
+repo='lambdalisue/fern-git-status.vim'
+
 
 [[plugins]]
 repo='w0rp/ale'
