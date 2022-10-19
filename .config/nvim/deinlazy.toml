@@ -146,16 +146,17 @@ on_ft = ['php', 'python', 'ruby', 'css', 'javascript', 'sql', 'java']
 hook_add= '''
     set hidden
     let g:LanguageClient_autoStart = 1
+    let s:action_to_func = {
+         \ 'textDocument_definition'        :'LanguageClient#textDocument_definition()',
+         \ 'textDocument_references'        :'LanguageClient#textDocument_references()',
+         \ 'textDocument_rename'            :'LanguageClient#textDocument_rename()',
+         \ 'textDocument_documentSymbol'    :'LanguageClient#textDocument_documentSymbol()',
+         \ 'textDocument_documentHighlight' :'LanguageClient#textDocument_documentHighlight()',
+         \ 'textDocument_formatting'        :'LanguageClient#textDocument_formatting()'
+    \}
     function! s:lsp()
         if has_key(g:LanguageClient_serverCommands, &filetype)
-            nnoremap <buffer><silent> <Space>l[ :call LanguageClient#textDocument_definition()<CR>
-            nnoremap <buffer><silent> <Space>l] :call LanguageClient#textDocument_references()<CR>
-            nnoremap <buffer><silent> <Space>lr :call LanguageClient#textDocument_rename()<CR>
-            nnoremap <buffer><silent> <Space>ld :call LanguageClient#textDocument_documentSymbol()<CR>
-            nnoremap <buffer><silent> <Space>lh :call LanguageClient#textDocument_documentHighlight()<CR>
-            nnoremap <buffer><silent> <Space>lH :call LanguageClient#clearDocumentHighlight()<CR>
-            nnoremap <buffer><silent> <Space>lf :call LanguageClient#textDocument_formatting()<CR>
-            nnoremap <buffer><silent> <Space>lF :call LanguageClient#textDocument_rangeFormatting()<CR>
+            call lsp_mapper#register(s:action_to_func)
         endif
     endfunction
         
