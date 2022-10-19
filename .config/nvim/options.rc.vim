@@ -21,7 +21,7 @@ set relativenumber "相対行表示
 
 "カラースキーム
 syntax on
-colorscheme darcula
+colorscheme molokai
 
 "fzf
 if has('mac')
