@@ -199,19 +199,6 @@ repo = 'gregsexton/MatchTag'
 on_ft = ['html', 'xhtml', 'php']
 
 [[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'
-hook_add = '''
-    nnoremap <silent> <Space>ig :<C-u>IndentGuidesToggle<CR>
-'''
-hook_source='''
-    let g:indent_guides_enable_on_vim_startup = 1
-    let g:indent_guides_exclude_filetypes = [
-    \ 'nerdtree',
-    \ 'help',
-    \ ]
-'''
-
-[[plugins]]
 repo = 'SirVer/ultisnips'
 on_event = 'InsertEnter'
 hook_add = '''
@@ -221,14 +208,6 @@ hook_add = '''
        let s:mysnippetsDir = expand(g:conf_dir . '/mycoolsnippets')
        let g:UltiSnipsSnippetDirectories=[s:mysnippetsDir, 'UltiSnips']
        execute 'set runtimepath+=' . s:mysnippetsDir
-'''
-
-[[plugins]]
-repo = 'scrooloose/nerdtree'
-if = "has('nvim')"
-hook_source = '''
-  "nerdtreeは範囲指定の数字不要なのでC-u不要
-  nnoremap <silent> [nerd]o :NERDTree<CR>
 '''
 
 [[plugins]]

@@ -44,11 +44,7 @@ nmap m [markdownpreview]
 nnoremap [ale] <Nop>
 nmap <C-a> [ale]
 
-"nerdtreeだとmappingが効かない
-nnoremap [nerd] <Nop>
-nmap <C-n> [nerd]
 "key mapping
-
 
 autocmd FileType php call s:my_php_mappings()
 function! s:my_php_mappings() abort
