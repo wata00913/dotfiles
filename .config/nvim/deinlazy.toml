@@ -1,32 +1,4 @@
 [[plugins]]
-repo = 'Shougo/context_filetype.vim'
-
-[[plugins]]
-repo='Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-if = "has('nvim')"
-    on_event = 'InsertEnter'
-    hook_source = '''
-        let g:deoplete#enable_at_startup = 1
-
-	call deoplete#custom#source('buffer',
-	\ 'min_pattern_length', 1)
-
-        inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ deoplete#mappings#manual_complete()
-		function! s:check_back_space() abort "{{{
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1]  =~ '\s'
-		endfunction"}}}
-        inoremap <expr><CR> pumvisible() ?
-        \ deoplete#close_popup() : "<CR>"
-
-
-    '''
-
-[[plugins]]
 repo = 'junegunn/fzf.vim'
 hook_add = '''
 let g:fzf_command_prefix = 'Fzf'
@@ -137,62 +109,13 @@ hook_source = '''
         \}
 '''
 
-#lsp
+# lsp
 [[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-rev = 'next'
-build = 'bash install.sh'
-on_ft = ['php', 'python', 'ruby', 'css', 'javascript', 'sql', 'java']
-hook_add= '''
-    set hidden
-    let g:LanguageClient_autoStart = 1
-    let s:action_to_func = {
-         \ 'textDocument_definition'        :'LanguageClient#textDocument_definition()',
-         \ 'textDocument_references'        :'LanguageClient#textDocument_references()',
-         \ 'textDocument_rename'            :'LanguageClient#textDocument_rename()',
-         \ 'textDocument_documentSymbol'    :'LanguageClient#textDocument_documentSymbol()',
-         \ 'textDocument_documentHighlight' :'LanguageClient#textDocument_documentHighlight()',
-         \ 'textDocument_formatting'        :'LanguageClient#textDocument_formatting()'
-    \}
-    function! s:lsp()
-        if has_key(g:LanguageClient_serverCommands, &filetype)
-            call lsp_mapper#register(s:action_to_func)
-        endif
-    endfunction
-        
-    augroup my-lsp
-        autocmd!
-        autocmd FileType * call s:lsp()
-    augroup END
-    if has('mac')
-        let s:conf_os = '/config_mac'
-    elseif has('unix')
-        let s:conf_os = '/config_linux'
-    endif
-    let g:LanguageClient_serverCommands = {
-        \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-        \ 'php': ['intelephense', '--stdio'], 
-        \ 'python': ['pyls'],
-        \ 'ruby': ['solargraph', 'stdio'],
-        \ 'javascript': ['javascript-typescript-stdio'],
-        \ 'css': ['css-language-server', '--stdio'],
-        \ 'sql': ['sql-language-server', 'up', '--method', 'stdio'],
-        \ 'java':['java', 
-                \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-                \ '-Dosgi.bundles.defaultStartLevel=4',
-                \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
-                \ '-Dlog.level=ALL',
-                \ '-noverify',
-                \ '-Dfile.encoding=UTF-8',
-                \ '-Xmx1G',
-                \ '-jar',
-                \ expand('~/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'),
-                \ '-configuration',
-                \ expand('~/lsp/eclipse.jdt.ls' . s:conf_os),
-                \ '-data',
-                \ getcwd()
-                \]
-        \ }
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+on_ft = ['ruby']
+hook_add = '''
+    call coc_settings#run()
 '''
 
 [[plugins]]
