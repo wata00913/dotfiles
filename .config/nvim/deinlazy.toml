@@ -113,7 +113,6 @@ hook_source = '''
 [[plugins]]
 repo = 'neoclide/coc.nvim'
 rev = 'release'
-on_ft = ['ruby']
 hook_add = '''
     call coc_settings#run()
 '''
