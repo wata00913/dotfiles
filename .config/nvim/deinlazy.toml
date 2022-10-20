@@ -118,6 +118,10 @@ hook_add = '''
     call coc_settings#run()
 '''
 
+# fzf for coc
+[[plugins]]
+repo = 'antoinemadec/coc-fzf'
+
 [[plugins]]
 repo = 'gregsexton/MatchTag'
 on_ft = ['html', 'xhtml', 'php']

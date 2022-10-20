@@ -12,6 +12,7 @@ function! s:common_settings() abort
     set signcolumn=yes
 
     let g:coc_config_home='~/lsp/coc'
+    let g:coc_data_home='~/lsp/coc'
 endfunction
 
 function! s:completion_settings() abort
@@ -31,16 +32,14 @@ function! CheckBackspace() abort
 endfunction
 
 function! s:action_settings() abort
-    let action_to_func = {
-         \ 'textDocument_definition'        :"CocActionAsync('jumpDefinition')",
-         \ 'textDocument_references'        :"CocActionAsync('references')",
-         \ 'textDocument_rename'            :"CocActionAsync('rename')",
-         \ 'textDocument_documentSymbol'    :"CocActionAsync('diagnosticInfo')",
-         \ 'textDocument_documentHighlight' :"CocActionAsync('highlight')",
-         \ 'textDocument_formatting'        :"CocActionAsync('format')"
+    let action_to_rhs = {
+         \ 'textDocument_definition'        :['plug', '(coc-definition)'],
+         \ 'textDocument_references'        :['plug', '(coc-references)'],
+         \ 'textDocument_rename'            :['plug', '(coc-rename)'],
+         \ 'textDocument_documentSymbol'    :['command', 'CocFzfList outline<CR>'],
+         \ 'textDocument_documentHighlight' :['func', "CocAction('highlight')<CR>"],
+         \ 'textDocument_formatting'        :['plug', '(coc-format)']
     \}
 
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-
-    call lsp_mapper#register(action_to_func)
+    call lsp_mapper#register(action_to_rhs)
 endfunction
