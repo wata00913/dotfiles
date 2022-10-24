@@ -33,6 +33,8 @@ function! s:completion_settings() abort
     inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
     inoremap <silent><expr> <C-k> coc#refresh()
+    
+    nnoremap <Space>ls :CocStart<CR>
 endfunction
 
 function! s:completion_highlight() abort
