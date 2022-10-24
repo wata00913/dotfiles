@@ -22,6 +22,7 @@ function! s:completion_settings() abort
     " https://github.com/neoclide/coc.nvim/wiki/F.A.Q#some-highlight-groups-not-work-after-colorscheme-command
     autocmd ColorScheme * call s:completion_highlight()
 
+    " 補完の初期表示時に未選択状態にする設定は`suggest.noselect`で行う
     inoremap <silent><expr> <C-n>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
