@@ -16,6 +16,12 @@ function! s:common_settings() abort
 endfunction
 
 function! s:completion_settings() abort
+    " color schema
+    " 既存のカラーコマンドをロードする際にハイライト設定がクリアされるので、
+    " autocmd ColorSchemeを使う
+    " https://github.com/neoclide/coc.nvim/wiki/F.A.Q#some-highlight-groups-not-work-after-colorscheme-command
+    autocmd ColorScheme * call s:completion_highlight()
+
     inoremap <silent><expr> <C-n>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
@@ -24,6 +30,11 @@ function! s:completion_settings() abort
     inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
     inoremap <silent><expr> <C-k> coc#refresh()
+endfunction
+
+function! s:completion_highlight() abort
+    hi CocSearch ctermfg=white guifg=white
+    hi CocMenuSel ctermbg=gray guibg=gray
 endfunction
 
 function! CheckBackspace() abort
