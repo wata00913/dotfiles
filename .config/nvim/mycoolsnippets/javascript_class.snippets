@@ -1,0 +1,32 @@
+priority 1
+
+snippet clini "class and constructor"
+class ${1:className} {
+  constructor(${2:arg}) {
+    ${3}
+  }
+  ${4}
+}
+endsnippet
+
+snippet getter "getter"
+get ${1:property}() {
+  return this._$1;
+}
+endsnippet
+
+snippet setter "setter"
+set ${1:property}(${2:val}) {
+  this._$1 = $2;
+}
+endsnippet
+
+snippet accessor "getter and setter"
+get ${1:property}() {
+  return this._$1;
+}
+
+set $1(${2:val}) {
+  this._$1 = $2;
+}
+endsnippet
