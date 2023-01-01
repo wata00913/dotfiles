@@ -1,5 +1,3 @@
-eval "$(pyenv init -)"
-eval "$(rbenv init -)"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export RUBY_ROOT="$HOME/.rbenv"
@@ -9,6 +7,9 @@ export PYTHONDONTWRITEBYTECODE=1
 export PATH="$PYENV_ROOT/shims:$PATH"
 export PATH="$RUBY_ROOT/bin:$PATH"
 export PATH="$PHP_ROOT/bin:$PATH"
+
+eval "$(pyenv init -)"
+eval "$(rbenv init -)"
 eval "$(phpenv init -)"
 
 export PATH="$PATH:$HOME/bin"
