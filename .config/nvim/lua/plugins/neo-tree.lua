@@ -53,16 +53,16 @@ return {
           width = 30,
           mappings = {
             ['<space>'] = 'toggle_node',
-            ['<cr>'] = 'open',
+            ['<cr>'] = 'set_root',
             ['<esc>'] = 'revert_preview',
             ['P'] = { 'toggle_preview', config = { use_float = true } },
-            ['l'] = 'focus_preview',
             ['s'] = 'open_split',
             ['v'] = 'open_vsplit',
             ['t'] = 'open_tabnew',
-            ['C'] = 'close_node',
-            ['z'] = 'close_all_nodes',
-            ['Z'] = 'expand_all_nodes',
+            ['l'] = 'open',
+            ['L'] = 'expand_all_nodes',
+            ['h'] = 'close_node',
+            ['H'] = 'close_all_nodes',
             ['R'] = 'refresh',
             ['a'] = {
               'add',
@@ -73,11 +73,24 @@ return {
             ['A'] = 'add_directory',
             ['d'] = 'delete',
             ['r'] = 'rename',
-            ['y'] = 'copy_to_clipboard',
-            ['x'] = 'cut_to_clipboard',
-            ['p'] = 'paste_from_clipboard',
-            ['c'] = 'copy',
+            ["y"] = {
+                function(state)
+                  local node = state.tree:get_node()
+                  local path = node:get_id()
+                  local cwd = vim.fn.getcwd()
+                  local relative_path = vim.fn.fnamemodify(path, ':.')
+                  vim.fn.setreg("+", relative_path, "c")
+                  vim.notify("Copied relative path: " .. relative_path)
+                end,
+                desc = "Copy Relative Path to Clipboard",
+            },
             ['m'] = 'move',
+            ['M'] = {
+                'move',
+                 config = {
+                   show_path = "absolute"
+                 }
+            },
             ['q'] = 'close_window',
             ['?'] = 'show_help',
             ['<'] = 'prev_source',
@@ -110,8 +123,8 @@ return {
           window = {
             mappings = {
               ['H'] = 'toggle_hidden',
-              ['/'] = 'fuzzy_finder',
-              ['f'] = 'filter_on_submit',
+              ["/"] = "noop",
+              ['f'] = 'fuzzy_finder',
               ['<c-x>'] = 'clear_filter',
               ['[g'] = 'prev_git_modified',
               [']g'] = 'next_git_modified',
