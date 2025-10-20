@@ -35,7 +35,7 @@ nnoremap <Down> <C-w>j
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
 "TODO leaderが効かない
-let g:mapleader = ","
+"let g:mapleader = ","
 
 "key mapping
 nnoremap [markdownpreview] <Nop>

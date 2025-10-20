@@ -26,7 +26,7 @@ augroup END
 
 "カラースキーム
 syntax on
-colorscheme molokai
+"colorscheme molokai
 
 "fzf
 if has('mac')
