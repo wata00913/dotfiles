@@ -8,28 +8,30 @@ return {
       'williamboman/mason-lspconfig.nvim',
     },
     config = function()
-      local lspconfig = require('lspconfig')
       local cmp_nvim_lsp = require('cmp_nvim_lsp')
       
       -- LSPのキーマップ設定
-      local on_attach = function(client, bufnr)
-        local opts = { noremap = true, silent = true, buffer = bufnr }
-        
-        vim.keymap.set('n', '<space>l[', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', '<space>l]', vim.lsp.buf.references, opts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', '<space>lr', vim.lsp.buf.rename, opts)
-        vim.keymap.set('n', '<space>la', vim.lsp.buf.code_action, opts)
-        vim.keymap.set('n', '<space>ld', vim.lsp.buf.document_symbol, opts)
-        vim.keymap.set('n', '<space>lh', vim.lsp.buf.document_highlight, opts)
-        vim.keymap.set('n', '<space>lf', function()
-          vim.lsp.buf.format({ async = true })
-        end, opts)
-        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-        vim.keymap.set('n', '<space>d', vim.diagnostic.open_float, opts)
-        vim.keymap.set('n', '<space>le', vim.diagnostic.setloclist, opts)
-      end
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local bufnr = args.buf
+          local opts = { noremap = true, silent = true, buffer = bufnr }
+          
+          vim.keymap.set('n', '<space>l[', vim.lsp.buf.definition, opts)
+          vim.keymap.set('n', '<space>l]', vim.lsp.buf.references, opts)
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+          vim.keymap.set('n', '<space>lr', vim.lsp.buf.rename, opts)
+          vim.keymap.set('n', '<space>la', vim.lsp.buf.code_action, opts)
+          vim.keymap.set('n', '<space>ld', vim.lsp.buf.document_symbol, opts)
+          vim.keymap.set('n', '<space>lh', vim.lsp.buf.document_highlight, opts)
+          vim.keymap.set('n', '<space>lf', function()
+            vim.lsp.buf.format({ async = true })
+          end, opts)
+          vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+          vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+          vim.keymap.set('n', '<space>d', vim.diagnostic.open_float, opts)
+          vim.keymap.set('n', '<space>le', vim.diagnostic.setloclist, opts)
+        end,
+      })
       
       -- 診断表示の設定
       vim.diagnostic.config({
@@ -56,24 +58,9 @@ return {
       -- LSPの機能を補完に統合
       local capabilities = cmp_nvim_lsp.default_capabilities()
       
-      -- デフォルトの設定
-      local default_setup = {
-        on_attach = on_attach,
+      -- Lua用の特別な設定
+      vim.lsp.config('lua_ls', {
         capabilities = capabilities,
-      }
-      
-      -- 各言語サーバーの設定
-      -- TypeScript/JavaScript
-      lspconfig.ts_ls.setup(default_setup)
-      
-      -- Python
-      lspconfig.pyright.setup(default_setup)
-      
-      -- Ruby
-      lspconfig.solargraph.setup(default_setup)
-      
-      -- Lua
-      lspconfig.lua_ls.setup(vim.tbl_extend('force', default_setup, {
         settings = {
           Lua = {
             diagnostics = {
@@ -88,21 +75,38 @@ return {
             },
           },
         },
-      }))
+      })
       
-      -- PHP
-      lspconfig.intelephense.setup(default_setup)
+      -- 各言語サーバーにcapabilitiesを設定
+      local servers = {
+        'ts_ls',
+        'pyright',
+        'solargraph',
+        'intelephense',
+        'gopls',
+        'rust_analyzer',
+        'html',
+        'cssls',
+        'jsonls',
+      }
       
-      -- Go
-      lspconfig.gopls.setup(default_setup)
+      for _, server in ipairs(servers) do
+        vim.lsp.config(server, {
+          capabilities = capabilities,
+        })
+      end
       
-      -- Rust
-      lspconfig.rust_analyzer.setup(default_setup)
-      
-      -- HTML/CSS/JSON
-      lspconfig.html.setup(default_setup)
-      lspconfig.cssls.setup(default_setup)
-      lspconfig.jsonls.setup(default_setup)
+      -- 各言語サーバーを有効化
+      vim.lsp.enable('ts_ls')
+      vim.lsp.enable('pyright')
+      vim.lsp.enable('solargraph')
+      vim.lsp.enable('lua_ls')
+      vim.lsp.enable('intelephense')
+      vim.lsp.enable('gopls')
+      vim.lsp.enable('rust_analyzer')
+      vim.lsp.enable('html')
+      vim.lsp.enable('cssls')
+      vim.lsp.enable('jsonls')
     end,
   },
   {
