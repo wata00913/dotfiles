@@ -34,6 +34,9 @@ nnoremap <Down> <C-w>j
 "insert to normal
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
+"terminal
+tnoremap jj <c-\><c-n>
+
 "TODO leaderが効かない
 "let g:mapleader = ","
 
