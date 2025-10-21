@@ -9,13 +9,13 @@ return {
     },
     config = function()
       local cmp_nvim_lsp = require('cmp_nvim_lsp')
-      
+
       -- LSPのキーマップ設定
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
           local bufnr = args.buf
           local opts = { noremap = true, silent = true, buffer = bufnr }
-          
+
           vim.keymap.set('n', '<space>l[', vim.lsp.buf.definition, opts)
           vim.keymap.set('n', '<space>l]', vim.lsp.buf.references, opts)
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
@@ -26,18 +26,16 @@ return {
           vim.keymap.set('n', '<space>lf', function()
             vim.lsp.buf.format({ async = true })
           end, opts)
-          vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-          vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-          vim.keymap.set('n', '<space>d', vim.diagnostic.open_float, opts)
+          vim.keymap.set('n', '<C-h>', vim.diagnostic.goto_prev, opts)
+          vim.keymap.set('n', '<C-l>', vim.diagnostic.goto_next, opts)
+          vim.keymap.set('n', ':', vim.diagnostic.open_float, opts)
           vim.keymap.set('n', '<space>le', vim.diagnostic.setloclist, opts)
         end,
       })
-      
+
       -- 診断表示の設定
       vim.diagnostic.config({
-        virtual_text = {
-          prefix = '●',
-        },
+        virtual_text = false,
         signs = true,
         underline = true,
         update_in_insert = false,
@@ -47,17 +45,32 @@ return {
           source = 'always',
         },
       })
-      
+
+      -- virtual_textの表示/非表示を切り替える関数
+      local virtual_text_enabled = false
+      local function toggle_virtual_text()
+        virtual_text_enabled = not virtual_text_enabled
+        vim.diagnostic.config({
+          virtual_text = virtual_text_enabled and {
+            prefix = '●',
+          } or false,
+        })
+        print('Virtual text ' .. (virtual_text_enabled and 'enabled' or 'disabled'))
+      end
+
+      -- キーマップを設定
+      vim.keymap.set('n', '<space>lv', toggle_virtual_text, { noremap = true, silent = true, desc = 'Toggle diagnostics virtual text' })
+
       -- 診断記号の設定
       local signs = { Error = '✖', Warn = '⚠', Hint = '', Info = '' }
       for type, icon in pairs(signs) do
         local hl = 'DiagnosticSign' .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
       end
-      
+
       -- LSPの機能を補完に統合
       local capabilities = cmp_nvim_lsp.default_capabilities()
-      
+
       -- Lua用の特別な設定
       vim.lsp.config('lua_ls', {
         capabilities = capabilities,
@@ -76,7 +89,7 @@ return {
           },
         },
       })
-      
+
       -- 各言語サーバーにcapabilitiesを設定
       local servers = {
         'ts_ls',
@@ -89,13 +102,13 @@ return {
         'cssls',
         'jsonls',
       }
-      
+
       for _, server in ipairs(servers) do
         vim.lsp.config(server, {
           capabilities = capabilities,
         })
       end
-      
+
       -- 各言語サーバーを有効化
       vim.lsp.enable('ts_ls')
       vim.lsp.enable('pyright')
@@ -162,7 +175,7 @@ return {
     config = function()
       local cmp = require('cmp')
       local luasnip = require('luasnip')
-      
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -216,7 +229,7 @@ return {
           end,
         },
       })
-      
+
       -- コマンドライン補完
       cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
@@ -225,7 +238,7 @@ return {
           { name = 'cmdline' },
         }),
       })
-      
+
       cmp.setup.cmdline('/', {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
