@@ -1,6 +1,7 @@
 return {
   {
     'junegunn/fzf.vim',
+    lazy = false,
     dependencies = {
       {
         'junegunn/fzf',
@@ -39,26 +40,26 @@ return {
           vim.fn.setreg('*', table.concat(lines, '\n'))
         end,
       }
-      
+
       vim.api.nvim_create_user_command('FzfLines', function()
         local query = vim.fn.input('Pattern>')
         vim.cmd('FzfLines ' .. query)
       end, {})
-      
+
       vim.keymap.set('n', '<Space>ul', '<cmd>FzfLines<cr>', { silent = true })
-      
+
       vim.api.nvim_create_user_command('FzfAg', function(opts)
         local query = opts.args ~= '' and opts.args or vim.fn.input('Pattern>')
         vim.fn['fzf#vim#ag'](query, { options = '--bind ctrl-a:select-all,ctrl-d:deselect-all' })
       end, { nargs = '?' })
-      
+
       vim.keymap.set('n', '<Space>ug', '<cmd>FzfAg<cr>', { silent = true })
       vim.keymap.set('n', '<Space>ur', function()
         vim.cmd('FzfAg ' .. vim.fn.expand('<cword>'))
       end, { silent = true })
-      
+
       vim.api.nvim_create_user_command('FzfGitDiff', function()
-        vim.cmd('GitGutterQuickFix')
+        require('gitsigns').setqflist('all', { open = false })
         local qflist = vim.fn.getqflist()
         local lines = vim.tbl_map(function(val)
           return table.concat({
@@ -67,7 +68,7 @@ return {
             val.text
           }, ':')
         end, qflist)
-        
+
         vim.fn['fzf#run'](vim.fn['fzf#wrap']({
           source = lines,
           sink = function(line)
@@ -77,7 +78,7 @@ return {
           end,
         }))
       end, {})
-      
+
       vim.keymap.set('n', '<Space>uu', '<cmd>FzfGitDiff<cr>', { silent = true })
     end,
   },
