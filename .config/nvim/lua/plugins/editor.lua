@@ -1,7 +1,7 @@
 return {
   {
-    'thinca/vim-qfreplace',
-    cmd = 'Qfreplace',
+    'kevinhwang91/nvim-bqf',
+    ft = 'qf',
   },
   {
     'kana/vim-submode',
@@ -26,27 +26,6 @@ return {
       vim.fn['submode#enter_with']('tabmove', 'n', '', '<Space>st', '<Nop>')
       vim.fn['submode#map']('bufmove', 'n', '', 'n', ':tabnext<CR>')
       vim.fn['submode#map']('bufmove', 'n', '', 'p', ':tabprevious<CR>')
-    end,
-  },
-  {
-    'tpope/vim-surround',
-    event = 'VeryLazy',
-  },
-  {
-    'scrooloose/nerdcommenter',
-    keys = { { '<leader>c', mode = { 'n', 'v' } } },
-  },
-  {
-    'phaazon/hop.nvim',
-    branch = 'v2',
-    keys = {
-      { '<Space>kk', '<cmd>HopWord<CR>', desc = 'Hop Word' },
-      { '<Space>kp', '<cmd>HopPattern<CR>', desc = 'Hop Pattern' },
-      { '<Space>kc', '<cmd>HopChar1<CR>', desc = 'Hop Char' },
-      { '<Space>kl', '<cmd>HopLine<CR>', desc = 'Hop Line' },
-    },
-    config = function()
-      require('hop').setup()
     end,
   },
 }
