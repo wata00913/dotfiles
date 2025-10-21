@@ -90,9 +90,76 @@ return {
         },
       })
 
+      -- -- efm-langserver用の設定
+      local eslint = {
+        lintCommand = 'yarn eslint -f visualstudio --stdin --stdin-filename ${INPUT}',
+        lintStdin = true,
+        lintFormats = { '%f(%l,%c): %tarning %m', '%f(%l,%c): %rror %m' },
+        lintIgnoreExitCode = true,
+        formatCommand = 'eslint_d --fix-to-stdout --stdin --stdin-filename ${INPUT}',
+        formatStdin = true,
+        init_options = {
+          documentFormatting = false,
+          documentRangeFormatting = false,
+        },
+      }
+
+      local prettier = {
+        formatCommand = 'yarn prettier --stdin-filepath ${INPUT}',
+        formatStdin = true,
+        rootMarkers = {
+          '.prettierrc',
+          '.prettierrc.json',
+          '.prettierrc.js',
+          '.prettierrc.yml',
+          '.prettierrc.yaml',
+          '.prettierrc.json5',
+          '.prettierrc.mjs',
+          '.prettierrc.cjs',
+          '.prettierrc.toml',
+        },
+        init_options = {
+          documentFormatting = true,
+          documentRangeFormatting = true,
+        },
+      }
+
+      vim.lsp.config('efm-lsp', {
+        cmd = { 'efm-langserver' },
+        capabilities = capabilities,
+        filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue', 'json', 'html', 'css', 'scss', 'markdown' },
+        init_options = {
+         documentFormatting = true,
+         documentRangeFormatting = true,
+        }   ,
+         settings = {
+           rootMarkers = { '.git/', 'package.json' },
+           languages = {
+             javascript = { eslint, prettier },
+             javascriptreact = { eslint, prettier },
+             typescript = { eslint, prettier },
+             typescriptreact = { eslint, prettier },
+             vue = { eslint, prettier },
+             json = { prettier },
+             html = { prettier },
+             css = { prettier },
+             scss = { prettier },
+             markdown = { prettier },
+           },
+         },
+       })
+
+      vim.lsp.config('ts', {
+        cmd = { 'typescript-language-server --stdio' },
+        init_options = {
+          documentFormatting = false,
+          documentRangeFormatting = false,
+        },
+      })
+
       -- 各言語サーバーにcapabilitiesを設定
       local servers = {
-        'ts_ls',
+        'ts',
         'pyright',
         'solargraph',
         'intelephense',
@@ -101,6 +168,7 @@ return {
         'html',
         'cssls',
         'jsonls',
+        'efm-lsp'
       }
 
       for _, server in ipairs(servers) do
@@ -120,6 +188,7 @@ return {
       vim.lsp.enable('html')
       vim.lsp.enable('cssls')
       vim.lsp.enable('jsonls')
+      vim.lsp.enable('efm-lsp')
     end,
   },
   {
@@ -146,9 +215,7 @@ return {
     config = function()
       require('mason-lspconfig').setup({
         ensure_installed = {
-          'ts_ls',
           'pyright',
-          'solargraph',
           'lua_ls',
           'intelephense',
           'gopls',
