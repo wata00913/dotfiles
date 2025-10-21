@@ -10,6 +10,25 @@ return {
     config = function()
       local cmp_nvim_lsp = require('cmp_nvim_lsp')
 
+      -- document_symbolをkindでフィルタリングする共通関数
+      local function filter_document_symbols(kinds, title)
+        vim.lsp.buf.document_symbol({
+          on_list = function(options)
+            local items = {}
+            for _, item in ipairs(options.items) do
+              for _, kind in ipairs(kinds) do
+                if item.kind == kind then
+                  table.insert(items, item)
+                  break
+                end
+              end
+            end
+            vim.fn.setqflist({}, 'r', { title = title, items = items })
+            vim.cmd('copen')
+          end
+        })
+      end
+
       -- LSPのキーマップ設定
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
@@ -19,6 +38,7 @@ return {
           vim.keymap.set('n', '<space>l[', vim.lsp.buf.definition, opts)
           vim.keymap.set('n', '<space>l]', vim.lsp.buf.references, opts)
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+          vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts)
           vim.keymap.set('n', '<space>lr', vim.lsp.buf.rename, opts)
           vim.keymap.set('n', '<space>la', vim.lsp.buf.code_action, opts)
           vim.keymap.set('n', '<space>ld', vim.lsp.buf.document_symbol, opts)
@@ -30,6 +50,11 @@ return {
           vim.keymap.set('n', '<C-l>', vim.diagnostic.goto_next, opts)
           vim.keymap.set('n', ':', vim.diagnostic.open_float, opts)
           vim.keymap.set('n', '<space>le', vim.diagnostic.setloclist, opts)
+
+          -- Methodだけを抽出してquickfixに追加
+          vim.keymap.set('n', '<space>lm', function()
+            filter_document_symbols({ 'Method' }, 'Methods')  -- 6 = Method
+          end, opts)
         end,
       })
 
@@ -254,29 +279,10 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert({
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-j>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-k>'] = cmp.mapping.scroll_docs(4),
           ['<C-e>'] = cmp.mapping.abort(),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
