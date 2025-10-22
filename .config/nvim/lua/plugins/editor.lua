@@ -28,4 +28,15 @@ return {
       vim.fn['submode#map']('bufmove', 'n', '', 'p', ':tabprevious<CR>')
     end,
   },
+  {
+    'numToStr/Comment.nvim',
+    lazy = false,
+    config = function()
+      require('Comment').setup()
+      vim.keymap.set('n', '<space>cc', '<Plug>(comment_toggle_linewise_current)', { desc = 'Comment toggle current line' })
+      vim.keymap.set('v', '<space>cc', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Comment toggle linewise (visual)' })
+      vim.keymap.set('n', '<space>cb', '<Plug>(comment_toggle_blockwise_current)', { desc = 'Comment toggle current block' })
+      vim.keymap.set('v', '<space>cb', '<Plug>(comment_toggle_blockwise_visual)', { desc = 'Comment toggle blockwise (visual)' })
+    end,
+  },
 }
