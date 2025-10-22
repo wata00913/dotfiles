@@ -35,7 +35,7 @@ nnoremap <Down> <C-w>j
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
 "terminal
-tnoremap jj <c-\><c-n>
+tnoremap <C-[> <c-\><c-n>
 
 "TODO leaderが効かない
 "let g:mapleader = ","
