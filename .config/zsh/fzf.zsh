@@ -9,3 +9,10 @@ hd() {
     local select_his_dir=$(cat $HIS_PATH | sed -e "s/[$\']//g" | fzf)
     cd $select_his_dir
 }
+
+ch() {
+   local branches branch
+   branches=$(git --no-pager branch -vv) &&
+   branch=$(echo "$branches" | fzf +m) &&
+   git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
