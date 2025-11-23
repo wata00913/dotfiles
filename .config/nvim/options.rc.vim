@@ -19,9 +19,14 @@ set autoindent
 set smartindent
 set relativenumber "相対行表示
 
+augroup fileTypeIndent
+    autocmd!
+    autocmd BufRead,BufNewFile *.js setlocal tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+
 "カラースキーム
 syntax on
-colorscheme challenger_deep
+"colorscheme molokai
 
 "fzf
 if has('mac')

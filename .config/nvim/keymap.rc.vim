@@ -25,12 +25,20 @@ noremap <C-j> 10j
 noremap <C-k> 10k
 nnoremap ; :
 nnoremap : ;
+" arrow
+nnoremap <Up>   <C-w>k 
+nnoremap <Right> <C-w>l 
+nnoremap <Left> <C-w>h 
+nnoremap <Down> <C-w>j 
 
 "insert to normal
 inoremap <silent> jj <ESC>:<C-u>w<CR>
 
+"terminal
+tnoremap <C-[> <c-\><c-n>
+
 "TODO leaderが効かない
-let g:mapleader = ","
+"let g:mapleader = ","
 
 "key mapping
 nnoremap [markdownpreview] <Nop>
@@ -39,16 +47,7 @@ nmap m [markdownpreview]
 nnoremap [ale] <Nop>
 nmap <C-a> [ale]
 
-nnoremap [denite] <Nop>
-nmap <C-u> [denite]
-vnoremap [denite_v] <Nop>
-vmap <C-u> [denite_v]
-
-"nerdtreeだとmappingが効かない
-nnoremap [nerd] <Nop>
-nmap <C-n> [nerd]
 "key mapping
-
 
 autocmd FileType php call s:my_php_mappings()
 function! s:my_php_mappings() abort
