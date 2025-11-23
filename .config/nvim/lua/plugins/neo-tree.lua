@@ -6,6 +6,7 @@ return {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
       'MunifTanjim/nui.nvim',
+      's1n7ax/nvim-window-picker',
     },
     cmd = 'Neotree',
     keys = {
@@ -19,6 +20,13 @@ return {
         enable_git_status = true,
         enable_diagnostics = true,
         bind_to_cwd = false,
+        window = {
+          mappings = {
+            ['w'] = 'open_with_window_picker',
+            ['s'] = 'split_with_window_picker',
+            ['v'] = 'vsplit_with_window_picker',
+          },
+        },
         default_component_configs = {
           indent = {
             indent_size = 2,
@@ -59,7 +67,7 @@ return {
             ['s'] = 'open_split',
             ['v'] = 'open_vsplit',
             ['t'] = 'open_tabnew',
-            ['l'] = 'open',
+            ['l'] = 'open_with_window_picker',
             ['L'] = 'expand_all_nodes',
             ['h'] = 'close_node',
             ['H'] = 'close_all_nodes',
@@ -160,5 +168,47 @@ return {
   {
     'MunifTanjim/nui.nvim',
     lazy = true,
+  },
+  {
+    's1n7ax/nvim-window-picker',
+    version = '2.*',
+    config = function()
+      require('window-picker').setup({
+        filter_rules = {
+          include_current_win = false,
+          autoselect_one = true,
+          bo = {
+            filetype = { 'neo-tree', 'neo-tree-popup', 'notify' },
+            buftype = { 'terminal', 'quickfix' },
+          },
+        },
+        highlights = {
+          statusline = {
+            focused = {
+              fg = '#000000',
+              bg = '#e35e4f',
+              bold = true,
+            },
+            unfocused = {
+              fg = '#000000',
+              bg = '#44cc41',
+              bold = true,
+            },
+          },
+          winbar = {
+            focused = {
+              fg = '#000000',
+              bg = '#e35e4f',
+              bold = true,
+            },
+            unfocused = {
+              fg = '#000000',
+              bg = '#44cc41',
+              bold = true,
+            },
+          },
+        },
+      })
+    end,
   },
 }
