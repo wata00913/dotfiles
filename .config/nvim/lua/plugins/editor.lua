@@ -2,6 +2,15 @@ return {
   {
     'kevinhwang91/nvim-bqf',
     ft = 'qf',
+    config = function()
+      require('bqf').setup({
+        func_map = {
+          fzffilter = 'i',
+          open = 'o',
+          openc = '<CR>',
+        },
+      })
+    end,
   },
   {
     'kana/vim-submode',
